@@ -1,16 +1,9 @@
 <?php
-/**
- * SectionController
- * Gère les sections et les bénévoles associés
- */
 
 require_once __DIR__ . '/../models/Section.php';
 
 class SectionController {
 
-    /**
-     * Affiche la liste des sections
-     */
     public function sectionList() {
         $model = new Section();
         $sections = $model->getAllSections();
@@ -18,9 +11,6 @@ class SectionController {
         require_once __DIR__ . '/../views/section/sectionList.php';
     }
 
-    /**
-     * Affiche le détail d'une section avec ses bénévoles
-     */
     public function sectionDetail() {
         $cdSection = isset($_GET['cd']) ? trim($_GET['cd']) : null;
         
@@ -70,9 +60,6 @@ class SectionController {
         require_once __DIR__ . '/../views/section/sectionDetail.php';
     }
 
-    /**
-     * Traite l'ajout d'un bénévole à une section
-     */
     private function handleAddBenevole($model, $cdSection) {
         $idBen = isset($_POST['id_ben']) ? (int)$_POST['id_ben'] : 0;
         $role = isset($_POST['role']) ? trim($_POST['role']) : '';
@@ -103,9 +90,6 @@ class SectionController {
         }
     }
 
-    /**
-     * Traite la modification du rôle d'un bénévole
-     */
     private function handleUpdateRole($model, $cdSection) {
         $idBen = isset($_POST['id_ben']) ? (int)$_POST['id_ben'] : 0;
         $role = isset($_POST['role']) ? trim($_POST['role']) : '';
@@ -131,9 +115,6 @@ class SectionController {
         }
     }
 
-    /**
-     * Affiche le formulaire d'ajout de section et traite la soumission
-     */
     public function addSection() {
         $model = new Section();
         $benevoles = $model->getAllBenevoles();

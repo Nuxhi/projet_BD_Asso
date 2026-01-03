@@ -1,8 +1,4 @@
 <?php
-/**
- * Modèle Lieu
- * Gère les opérations sur les salles/lieux
- */
 
 require_once __DIR__ . '/../../config/database.php';
 
@@ -14,10 +10,6 @@ class Lieu {
         $this->db = $db->connect();
     }
 
-    /**
-     * Récupère tous les lieux
-     * @return array Liste des lieux
-     */
     public function getAllLieux() {
         $sql = "SELECT * FROM lieu ORDER BY lib_lieu ASC";
         $stmt = $this->db->prepare($sql);
@@ -25,11 +17,6 @@ class Lieu {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère un lieu par son ID
-     * @param int $idLieu ID du lieu
-     * @return array|false Données du lieu ou false
-     */
     public function getLieuById($idLieu) {
         $sql = "SELECT * FROM lieu WHERE id_lieu = :id_lieu";
         $stmt = $this->db->prepare($sql);

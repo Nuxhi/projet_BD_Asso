@@ -1,17 +1,10 @@
 <?php
-/**
- * ActiviteController
- * Gère les activités et les inscriptions
- */
 
 require_once __DIR__ . '/../models/Activite.php';
 require_once __DIR__ . '/../models/Lieu.php';
 
 class ActiviteController {
 
-    /**
-     * Affiche la liste des activités avec filtres
-     */
     public function activiteList() {
         $model = new Activite();
         
@@ -36,14 +29,11 @@ class ActiviteController {
             $act['places_restantes'] = $act['capacite'] - $act['nb_inscrits'];
             $act['est_complete'] = $act['places_restantes'] <= 0;
         }
-        unset($act); // Bonne pratique après une référence dans foreach
+        unset($act);
 
         require_once __DIR__.'/../views/activite/activiteList.php';
     }
 
-    /**
-     * Affiche le détail d'une activité avec la liste des inscrits
-     */
     public function activiteDetail() {
         $idActiv = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         
@@ -68,9 +58,6 @@ class ActiviteController {
         require_once __DIR__ . '/../views/activite/activiteDetail.php';
     }
 
-    /**
-     * Affiche le formulaire d'ajout d'activité et traite la soumission
-     */
     public function addActivite() {
         $model = new Activite();
         $sections = $model->getAllSections();

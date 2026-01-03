@@ -1,8 +1,4 @@
 <?php
-/**
- * Modèle Activite
- * Gère les opérations sur les activités et les inscriptions
- */
 
 require_once __DIR__ . '/../../config/database.php';
 
@@ -14,10 +10,6 @@ class Activite {
         $this->db = $db->connect();
     }
 
-    /**
-     * Récupère toutes les activités avec informations section et lieu
-     * @return array Liste des activités
-     */
     public function getAllActivite() {
         $sql = "SELECT a.*, s.lib_section, s.cd_section, l.lib_lieu, l.ad_lieu, l.capacite 
                 FROM activite a
@@ -30,14 +22,6 @@ class Activite {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère les activités avec filtres optionnels
-     * @param array|null $sections Liste des codes de sections (optionnel)
-     * @param array|null $jours Liste des jours (optionnel)
-     * @param string|null $heureMin Heure minimum (optionnel)
-     * @param string|null $heureMax Heure maximum (optionnel)
-     * @return array Liste des activités filtrées
-     */
     public function getActivitesFiltered($sections = null, $jours = null, $heureMin = null, $heureMax = null) {
         $sql = "SELECT a.*, s.lib_section, s.cd_section, l.lib_lieu, l.ad_lieu, l.capacite 
                 FROM activite a
@@ -91,10 +75,6 @@ class Activite {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère les sections utilisées par les activités
-     * @return array Liste des sections
-     */
     public function getUsedSections() {
         $sql = "SELECT DISTINCT s.lib_section, s.cd_section 
                 FROM section s
@@ -106,10 +86,6 @@ class Activite {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère toutes les sections (pour formulaire d'ajout)
-     * @return array Liste de toutes les sections
-     */
     public function getAllSections() {
         $sql = "SELECT cd_section, lib_section FROM section ORDER BY lib_section ASC";
         $stmt = $this->db->prepare($sql);
@@ -117,11 +93,6 @@ class Activite {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère une activité par son ID
-     * @param int $idActiv ID de l'activité
-     * @return array|false Données de l'activité ou false
-     */
     public function getActiviteById($idActiv) {
         $sql = "SELECT a.*, s.lib_section, s.cd_section, l.lib_lieu, l.ad_lieu, l.capacite 
                 FROM activite a
@@ -135,11 +106,6 @@ class Activite {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Récupère les adhérents inscrits à une activité
-     * @param int $idActiv ID de l'activité
-     * @return array Liste des adhérents inscrits
-     */
     public function getInscritsActivite($idActiv) {
         $sql = "SELECT ad.*, i.date_insc, i.remise
                 FROM adherent ad
@@ -153,11 +119,6 @@ class Activite {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Compte le nombre d'inscrits à une activité
-     * @param int $idActiv ID de l'activité
-     * @return int Nombre d'inscrits
-     */
     public function countInscrits($idActiv) {
         $sql = "SELECT COUNT(*) FROM inscrire WHERE id_activ = :id_activ";
         $stmt = $this->db->prepare($sql);
@@ -166,10 +127,6 @@ class Activite {
         return (int)$stmt->fetchColumn();
     }
 
-    /**
-     * Récupère le prochain ID disponible pour une activité
-     * @return int Prochain ID disponible
-     */
     public function getNextId() {
         $sql = "SELECT MAX(id_activ) + 1 as next_id FROM activite";
         $stmt = $this->db->prepare($sql);
@@ -178,19 +135,6 @@ class Activite {
         return $result['next_id'] ?? 1;
     }
 
-    /**
-     * Ajoute une nouvelle activité
-     * @param int $idActiv ID de l'activité
-     * @param string $libActiv Libellé de l'activité
-     * @param string $descActiv Description de l'activité
-     * @param string $jour Jour de l'activité
-     * @param string $hDeb Heure de début
-     * @param int $dureeMin Durée en minutes
-     * @param float $tarif Tarif annuel
-     * @param string $cdSectionActiv Code de la section
-     * @param int $idLieuActiv ID du lieu
-     * @return bool Succès de l'insertion
-     */
     public function addActivite($idActiv, $libActiv, $descActiv, $jour, $hDeb, $dureeMin, $tarif, $cdSectionActiv, $idLieuActiv) {
         $sql = "INSERT INTO activite (id_activ, lib_activ, desc_activ, jour, h_deb, duree_min, tarif, cd_section_activ, id_lieu_activ) 
                 VALUES (:id_activ, :lib_activ, :desc_activ, :jour, :h_deb, :duree_min, :tarif, :cd_section_activ, :id_lieu_activ)";
@@ -209,10 +153,6 @@ class Activite {
         return $stmt->execute();
     }
 
-    /**
-     * Récupère tous les lieux disponibles
-     * @return array Liste des lieux
-     */
     public function getAllLieux() {
         $sql = "SELECT * FROM lieu ORDER BY lib_lieu ASC";
         $stmt = $this->db->prepare($sql);
